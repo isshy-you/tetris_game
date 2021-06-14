@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ln -fs block_controller_ish01.py block_controller.py
+
 ## default value
 VALUE_L="1"
 IS_MANUAL_CONTROLL="n"
@@ -41,3 +43,5 @@ echo "OBSTACLE_PROBABILITY: ${OBSTACLE_PROBABILITY}"
 
 ## start game
 python3 game_manager/game_manager.py --game_time ${GAME_TIME} --seed ${RANDOM_SEED} --obstacle_height ${OBSTACLE_HEIGHT} --obstacle_probability ${OBSTACLE_PROBABILITY} --drop_speed ${DROP_SPEED} --manual ${IS_MANUAL_CONTROLL} --use_sample ${IS_SAMPLE_CONTROLL} --resultlogjson ${RESULT_LOG_JSON}
+
+mv result.json result_ish01.json
