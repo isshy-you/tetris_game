@@ -83,8 +83,7 @@ class Block_Controller(object):
         nextMove["strategy"]["y_operation"] = strategy[2]
         nextMove["strategy"]["y_moveblocknum"] = strategy[3]
         print("=== nextMove:",nextMove)
-        print("###### ISH01(ALPHA:12949) w/SAMPLE CODE ######")
-        print("###### ISH01a(ALPHA:13190) w/SAMPLE CODE ######")
+        print("###### ISH02(BLAVO:13190) w/SAMPLE CODE ######")
         return nextMove
 
         
