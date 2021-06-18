@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ln -fs block_controller_ish01.py block_controller.py
+echo  block_controller_ish01.py
+cp -p block_controller_ish01.py block_controller.py
 
 ## default value
 VALUE_L="1"
