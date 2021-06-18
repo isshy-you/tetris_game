@@ -274,7 +274,7 @@ class Block_Controller(object):
                 if pat0!=16 and pat1!=16 and pat2!=16 :
                     pat = pat0*4096+pat1*256+pat2*16+pat3
                     #DEBUG
-                    print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
+                    #print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
                 else:
                     pat = 0xfff
 
