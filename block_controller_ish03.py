@@ -56,7 +56,7 @@ class Block_Controller(object):
         if EvalValue > 0 :
             strategy = (direction0,x0,1,1)
             LatestEvalValue = EvalValue
-        print("<<< isshy-you:(EvalValue,shape,strategy)=(",LatestEvalValue,self.CurrentShape_index,strategy,")")
+        print("<<< ish02:(EvalValue,shape,strategy)=(",LatestEvalValue,self.CurrentShape_index,strategy,")")
 
         # sample code
         # search with current block Shape
@@ -84,7 +84,7 @@ class Block_Controller(object):
         nextMove["strategy"]["y_operation"] = strategy[2]
         nextMove["strategy"]["y_moveblocknum"] = strategy[3]
         print("=== nextMove:",nextMove)
-        print("###### ISH01(ALPHA:12949) w/SAMPLE CODE ######")
+        print("###### ISH02(ALPHA:10143/9166/2789) w/SAMPLE CODE ######")
         return nextMove
 
         
@@ -183,7 +183,7 @@ class Block_Controller(object):
         x_start = 0
         x_end = width-1
         x_step = 1
-        for y in range(height - 4, 0 ,-1):
+        for y in range(height - 4, 0, -1):
             for x in range(x_start,x_end,x_step):
                 if x > (width-1) :
                     pat0=15
@@ -238,7 +238,7 @@ class Block_Controller(object):
                     elif board[(y+3) * width + (x + 2)]!=0:
                         pat2 += 1
 
-                    if pat2==0 and y<(height-4) and self.CurrentShape_index!=1:
+                    if pat2==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5:
                         if board[(y+4) * width + (x + 2)]==0:
                             pat2 = 16
 
@@ -254,9 +254,12 @@ class Block_Controller(object):
                 if self.CurrentShape_index==1 :
                     if pat in dic_pat1:
                         direction = dic_pat1[pat]
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
+                        for yy in range(height - 4, y, -1):
+                             if board[(yy) * width + (x)] != 0:
+                                 break
                         score = 19
                         x0 = x
-                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
                 if self.CurrentShape_index==2 :
                     if pat in dic_pat2:
