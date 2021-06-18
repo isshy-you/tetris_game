@@ -167,6 +167,22 @@ bash start.sh -s y
 > 2. ページの右上にある [Fork] をクリックします。 <br>
 > 参考：[リポジトリをフォークする](https://docs.github.com/ja/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) <br>
 
+その後、自リポジトリにforkした`tetris_game`をローカルマシンに取得して下さい。
+
+```
+cd ~
+git clone https://github.com/<yourname>/tetris_game   # "<yourname>"さん（yourname=自分のアカウント名に読みかえて下さい）のリポジトリを取得する場合
+git clone https://github.com/seigot/tetris_game       # このリポジトリを取得する場合
+```
+
+既に`tetris_game`が存在しており、これを削除したい場合は`rm -f`を実行して下さい。
+
+```
+sudo rm -rf tetris_game
+```
+
+取得後はソースコード変更、変更リポジトリに反映する等してアップデートを進めて下さい。
+
 ### 実行
 
 `実行方法`を参考に実行環境の構築をして下さい。<br>
@@ -184,6 +200,9 @@ bash start.sh -s y
 
 今後、本リポジトリもバージョンアップしていく予定です。<br>
 本リポジトリのバージョンアップを取り込む場合は、forkしたリポジトリにて以下を実行して下さい。<br>
+
+※追記 2021/5より、Github UI上から操作可能になったようです。<br>
+[GitHub新機能「Fetch upstream」使ってみた！　1クリックで親リポジトリに追従（同期）](https://note.com/llminatoll/n/n423296287697)<br>
 
 ```
 git checkout master                                        # ローカルのmainブランチに移動
