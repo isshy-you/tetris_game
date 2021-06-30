@@ -49,13 +49,14 @@ class Block_Controller(object):
         # search best nextMove -->
         strategy = None
         LatestEvalValue = -100000
-
         # add additional code by isshy-you
+
+        # search with x range
         EvalValue,x0,direction0 = self.calcEvaluationValuePAT1(self.board_backboard)
         if EvalValue > 0 :
             strategy = (direction0,x0,1,1)
             LatestEvalValue = EvalValue
-        print("<<< isshy-you:(EvalValue,shape,strategy(dir,x,y_ope,y_mov))=(",LatestEvalValue,self.CurrentShape_index,strategy,")")
+        print("<<< isshy-you:(EvalValue,shape,strategy)=(",LatestEvalValue,self.CurrentShape_index,strategy,")")
 
         # sample code
         # search with current block Shape
@@ -70,20 +71,20 @@ class Block_Controller(object):
                 EvalValue = self.calcEvaluationValueSample(board)
                 # update best move
                 if EvalValue > LatestEvalValue:
-                    print(">>> SAMPLE   :(EvalValue,index,strategy(dir,x,y_ope,y_mov))=(",EvalValue,self.CurrentShape_index,(direction0, x0, 1, 1),")")
+                    print(">>> SAMPLE (EvalValue,shape,strategy)=(",EvalValue,self.CurrentShape_index,(direction0, x0, 1, 1),")")
                     strategy = (direction0, x0, 1, 1)
                     LatestEvalValue = EvalValue
 
         # search best nextMove <--
 
-        #print("!!! debug    :(EvalValue,index,strategy(dir,x,y_ope,y_mov))=( ",LatestEvalValue,self.CurrentShape_index,strategy,")")
-        print("=== processing time ===(", datetime.now() - t1,")")
+        print("===  processing time  ===(", datetime.now() - t1,")")
+        print("=== (EvalValue,shape,strategy)=( ",LatestEvalValue,self.CurrentShape_index,strategy,")")
         nextMove["strategy"]["direction"] = strategy[0]
         nextMove["strategy"]["x"] = strategy[1]
         nextMove["strategy"]["y_operation"] = strategy[2]
         nextMove["strategy"]["y_moveblocknum"] = strategy[3]
         print("=== nextMove:",nextMove)
-        print("###### ISH02(BLAVO:13190) w/SAMPLE CODE ######")
+        print("###### ISH01(ALPHA:12949) w/SAMPLE CODE ######")
         return nextMove
 
         
@@ -148,29 +149,23 @@ class Block_Controller(object):
         x0 = 0
         width = self.board_data_width #width=10
         height = self.board_data_height #height=22
-        dic_pat1 = {0x0ff:0,0x0f7:0,0x0f3:0,0x0f1:0,0x0f0:0,\
-                    0xf0f:2,\
-                    0x07f:0,0x077:0,0x073:0,0x071:0,0x070:0,\
-                    0xf07:2,0xf03:2,0xf01:2,0xf00:2,\
-                    0x70f:2,0x30f:2,0x10f:2,0x00f:2,\
-                    0x707:2,0x703:2,0x701:2,0x700:2}                    
+        dic_pat1 = {0x0ff:0,0x0f7:0,0x0f3:0,0x0f1:0,0x0f0:0, \
+                    0x07f:0,0x077:0,0x073:0,0x071:0,0x070:0}
 #        dic_pat1 = {0x0ff:0,0x0f7:0,0x0f3:0,0x0f1:0,0x0f0:0,\
 #                    0x07f:0,0x077:0,0x073:0,0x071:0,0x070:0,\
 #                    0x03f:0,0x037:0,0x033:0,0x031:0,0x030:0}
-        dic_pat2 = {0x011:1,\
-                    0x003:0,0x001:0,0x007:0,\
+        dic_pat2 = {0x011:1,0x003:0,0x001:0,0x007:0,\
                     0x30f:2,0x307:2,0x303:2,0x301:2,0x300:2,\
                     0x000:3}
         dic_pat3 = {0x110:3,\
                     0x00f:0,0x007:0,0x003:0,0x001:0,\
                     0x030:2,0x031:2,0x033:2,0x037:2,0x03f:2,\
                     0x000:1}
-        dic_pat4 = {0x000:3,\
-                    0x101:1,\
+        dic_pat4 = {0x101:1,\
                     0x010:0,0x011:0,0x013:0,0x017:0,0x01f:0,\
-                    0x100:2,0x101:2,0x103:2,0x107:2,0x10f:2}
-        dic_pat5 = {0x003:0,0x007:0,0x00f:0,0x001:0,0x000:0,0x110:0} #HighScore
-        #dic_pat5 = {0x003:0,0x007:0,0x00f:0,0x001:0,0x000:0,0x110:0,0x111:0}
+                    0x100:2,0x101:2,0x103:2,0x107:2,0x10f:2,\
+                    0x000:3}
+        dic_pat5 = {0x003:0,0x007:0,0x00f:0,0x001:0,0x000:0,0x110:0}
         dic_pat6 = {0x001:0,0x100:1,0x101:1,0x103:1,0x107:1,0x10f:1}
         dic_pat7 = {0x100:0,0x010:1,0x011:1,0x013:1,0x017:1,0x01f:1}
 
@@ -188,7 +183,7 @@ class Block_Controller(object):
         x_start = 0
         x_end = width-1
         x_step = 1
-        for y in range(height - 3, 0 ,-1):
+        for y in range(height - 4, 0 ,-1):
             for x in range(x_start,x_end,x_step):
                 if x > (width-1) :
                     pat0=15
@@ -243,84 +238,29 @@ class Block_Controller(object):
                     elif board[(y+3) * width + (x + 2)]!=0:
                         pat2 += 1
 
-                    if pat2==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5: #low score
-                    #if pat2==0 and y<(height-4) and self.CurrentShape_index!=1:
+                    if pat2==0 and y<(height-4) and self.CurrentShape_index!=1:
                         if board[(y+4) * width + (x + 2)]==0:
                             pat2 = 16
-
-                if x > (width-4) :
-                    pat3=15
-                else:
-                    pat3=0
-                    if board[y * width + (x + 3)]!=0:
-                        pat3 += 8
-                    if board[(y+1) * width + (x + 3)]!=0:
-                        pat3 += 4
-                    if board[(y+2) * width + (x + 3)]!=0:
-                        pat3 += 2
-                    if y > (height-4):
-                        pat3 += 1
-                    elif board[(y+3) * width + (x + 3)]!=0:
-                        pat3 += 1
-
-                    if pat3==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=2 and self.CurrentShape_index!=3 and self.CurrentShape_index!=5: #low score
-                    #if pat3==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5: #low score
-                    #if pat2==0 and y<(height-4) and self.CurrentShape_index!=1:
-                        if board[(y+4) * width + (x + 3)]==0:
-                            pat3 = 16
 
                 #matching
 
                 if pat0!=16 and pat1!=16 and pat2!=16 :
-                    pat = pat0*4096+pat1*256+pat2*16+pat3
+                    pat = pat0*256+pat1*16+pat2
                     #DEBUG
-                    print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
+                    #print("(shape,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'03x'),")")
                 else:
                     pat = 0xfff
-
-                #select rotate and adjust alignment
-                pat03x = pat >> 4
+                    
                 if self.CurrentShape_index==1 :
-                    if (pat03x) in dic_pat1:
-                        direction = dic_pat1[pat03x]
+                    if pat in dic_pat1:
+                        direction = dic_pat1[pat]
                         score = 19
-                        if direction==2:
-                            x0 = x + 1
-                        else:
-                            x0 = x
-                        for yy in range(y,0,-1):
-                             if board[(yy) * width + (x0)] != 0:
-                                 score = -10000
-                                 break
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        x0 = x
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
-                    else:
-                        if pat0==1 and pat1==1 and pat2==1 and pat3==1:
-                            direction=1
-                            score = 19
-                            x0 = x+2
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0)] != 0:
-                                    score = -10000
-                                    break
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0+1)] != 0:
-                                    score = -10000
-                                    break
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0+2)] != 0:
-                                    score = -10000
-                                    break
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0+3)] != 0:
-                                    score = -10000
-                                    break
-                            #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
-                            break
-                            
                 if self.CurrentShape_index==2 :
-                    if (pat03x) in dic_pat2:
-                        direction = dic_pat2[pat03x]
+                    if pat in dic_pat2:
+                        direction = dic_pat2[pat]
                         score = 19
                         if direction==0:
                             x0 = x
@@ -328,67 +268,58 @@ class Block_Controller(object):
                             x0 = x+1
                         else:
                             x0 = x
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
                 if self.CurrentShape_index==3 :
-                    if (pat03x) in dic_pat3:
-                        direction = dic_pat3[pat03x]
+                    if pat in dic_pat3:
+                        direction = dic_pat3[pat]
                         score = 19
                         if direction==0 or direction==1 or direction==3:
                             x0 = x+1
                         else:
                             x0 = x
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
                 if self.CurrentShape_index==4 :
-                    if (pat03x) in dic_pat4:
-                        direction = dic_pat4[pat03x]
+                    if pat in dic_pat4:
+                        direction = dic_pat4[pat]
                         score = 19
-                        if direction==1 or direction==2 or direction==3:
+                        if direction==2 or direction==3:
                             x0 = x+1
                         else:
                             x0 = x
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
                 if self.CurrentShape_index==5 :
-                    if (pat03x) in dic_pat5:
-                        direction = dic_pat5[pat03x]
+                    if pat in dic_pat5:
+                        direction = dic_pat5[pat]
                         score = 19
                         x0 = x+0
-                        for yy in range(y,0,-1):
-                             if board[(yy) * width + (x0)] != 0:
-                                 score = -10000
-                                 break
-                        for yy in range(y,0,-1):
-                             if board[(yy) * width + (x0+1)] != 0:
-                                 score = -10000
-                                 break
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
                 if self.CurrentShape_index==6 :
-                    if (pat03x) in dic_pat6:
-                        direction = dic_pat6[pat03x]
+                    if pat in dic_pat6:
+                        direction = dic_pat6[pat]
                         score = 19
                         if direction==0 :
                             x0 = x+1
                         else:
                             x0 = x
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
                 if self.CurrentShape_index==7 :
-                    if (pat03x) in dic_pat7:
-                        direction = dic_pat7[pat03x]
+                    if pat in dic_pat7:
+                        direction = dic_pat7[pat]
                         score = 19
                         if direction==0:
                             x0 = x+1
                         else:
                             x0 = x
-                        #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                        print("(shape,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'03x'),")")
                         break
 
-            if score > 18 :
-                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
-                break                    
+                if score > 18 :
+                    break                    
         #            
         return score,x0,direction
 
