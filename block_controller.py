@@ -83,7 +83,8 @@ class Block_Controller(object):
         nextMove["strategy"]["y_operation"] = strategy[2]
         nextMove["strategy"]["y_moveblocknum"] = strategy[3]
         print("=== nextMove:",nextMove)
-        print("###### ISH02(BLAVO:13190) w/SAMPLE CODE ######")
+        print("###### ISH02(BLAVO:13190/10211) w/SAMPLE CODE ######")
+        print("###### ISH02a(CHARLIE:13954/) w/SAMPLE CODE ######")
         return nextMove
 
         
@@ -190,91 +191,92 @@ class Block_Controller(object):
         x_step = 1
         for y in range(height - 3, 0 ,-1):
             for x in range(x_start,x_end,x_step):
+                pat0=0
                 if x > (width-1) :
-                    pat0=15
+                    pat0=15 #right
                 else:
-                    pat0=0
                     if board[y * width + x]!=0:
                         pat0 += 8
                     if board[(y+1) * width + x]!=0:
                         pat0 += 4
                     if board[(y+2) * width + x]!=0:
                         pat0 += 2
-                    if y > (height-4):
-                        pat0 += 1
-                    elif board[(y+3) * width + x]!=0:
+                    if  y > (height-4):
+                        pat0 += 1 #bottom
+                    elif board[(y+3) * width + x]!=0 :
                         pat0 += 1
 
                     if pat0==0 and y<(height-4) and self.CurrentShape_index!=1:
                         if board[(y+4) * width + x]==0:
-                            pat0 = 16
+                            pat0 = 16 #hole
                             
+                pat1=0
                 if x > (width-2) :
-                    pat1=15
+                    pat1=15 #right
                 else:
-                    pat1=0
                     if board[y * width + (x + 1)]!=0:
                         pat1 += 8
                     if board[(y+1) * width + (x + 1)]!=0:
                         pat1 += 4
                     if board[(y+2) * width + (x + 1)]!=0:
                         pat1 += 2
-                    if y > (height-4):
-                        pat1 += 1
-                    elif board[(y+3) * width + (x + 1)]!=0:
+                    if  y > (height-4):
+                        pat1 += 1 #bottom
+                    elif board[(y+3) * width + (x + 1)]!=0 :
                         pat1 += 1
 
                     if pat1==0 and y<(height-4) and self.CurrentShape_index!=1:
                         if board[(y+4) * width + (x + 1)]==0:
-                            pat1 = 16
+                            pat1 = 16 #hole
 
+                pat2=0
                 if x > (width-3) :
-                    pat2=15
+                    pat2=15 #right
                 else:
-                    pat2=0
-                    if board[y * width + (x + 2)]!=0:
+                    if board[(y+0) * width + (x + 2)]!=0:
                         pat2 += 8
                     if board[(y+1) * width + (x + 2)]!=0:
                         pat2 += 4
                     if board[(y+2) * width + (x + 2)]!=0:
                         pat2 += 2
-                    if y > (height-4):
+                    if  y > (height-4):
+                        pat2 += 1 #bottom
+                    elif board[(y+3) * width + (x + 2)]!=0 :
                         pat2 += 1
-                    elif board[(y+3) * width + (x + 2)]!=0:
-                        pat2 += 1
+                        print("pat2+=1:::",pat2)
 
-                    if pat2==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5: #low score
-                    #if pat2==0 and y<(height-4) and self.CurrentShape_index!=1:
+                    if pat2==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5:
                         if board[(y+4) * width + (x + 2)]==0:
-                            pat2 = 16
+                            pat2 = 16 #hole
 
+                pat3=0
                 if x > (width-4) :
-                    pat3=15
+                    pat3=15 #right
                 else:
-                    pat3=0
-                    if board[y * width + (x + 3)]!=0:
+                    if  board[(y+0) * width + (x + 3)]!=0:
                         pat3 += 8
-                    if board[(y+1) * width + (x + 3)]!=0:
+                    if  board[(y+1) * width + (x + 3)]!=0:
                         pat3 += 4
-                    if board[(y+2) * width + (x + 3)]!=0:
+                    if  board[(y+2) * width + (x + 3)]!=0:
                         pat3 += 2
-                    if y > (height-4):
-                        pat3 += 1
-                    elif board[(y+3) * width + (x + 3)]!=0:
+                    if  y > (height-4):
+                        pat3 += 1 #bottom
+                    elif board[(y+3) * width + (x + 3)]!=0 :
                         pat3 += 1
 
-                    if pat3==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=2 and self.CurrentShape_index!=3 and self.CurrentShape_index!=5: #low score
-                    #if pat3==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5: #low score
-                    #if pat2==0 and y<(height-4) and self.CurrentShape_index!=1:
+                    if pat3==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=2 and self.CurrentShape_index!=3 and self.CurrentShape_index!=5:
                         if board[(y+4) * width + (x + 3)]==0:
-                            pat3 = 16
+                            pat3 = 16 #hole
 
                 #matching
 
-                if pat0!=16 and pat1!=16 and pat2!=16 :
-                    pat = pat0*4096+pat1*256+pat2*16+pat3
+                if pat0!=16 and pat1!=16 and pat2!=16:
+                    if pat3!=16:
+                        pat = pat0*4096+pat1*256+pat2*16+pat3
+                    else:
+                        pat = pat0*4096+pat1*256+pat2*16
                     #DEBUG
-                    #print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
+                    print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
                 else:
                     pat = 0xfff
 
@@ -288,10 +290,12 @@ class Block_Controller(object):
                             x0 = x + 1
                         else:
                             x0 = x
-                        for yy in range(y,0,-1):
-                             if board[(yy) * width + (x0)] != 0:
-                                 score = -10000
-                                 break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x0)] != 0:
+                                print("#####BLOCKED x0+0")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
                     else:
@@ -299,20 +303,28 @@ class Block_Controller(object):
                             direction=1
                             score = 19
                             x0 = x+2
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0)] != 0:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x)] != 0:
+                                    print("#####BLOCKED x+0")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                                     score = -10000
                                     break
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0+1)] != 0:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+1)] != 0:
+                                    print("#####BLOCKED x+1")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                                     score = -10000
                                     break
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0+2)] != 0:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+2)] != 0:
+                                    print("#####BLOCKED x+2")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                                     score = -10000
                                     break
-                            for yy in range(y,0,-1):
-                                if board[(yy) * width + (x0+3)] != 0:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+3)] != 0:
+                                    print("#####BLOCKED x+3")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                                     score = -10000
                                     break
                             #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
@@ -328,6 +340,25 @@ class Block_Controller(object):
                             x0 = x+1
                         else:
                             x0 = x
+                        for yy in range(y-1,0,-1):
+                             if board[(yy) * width + (x)] != 0:
+                                 print("#####BLOCKED x+0")
+                                 print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                 score = -10000
+                                 break
+                        for yy in range(y-1,0,-1):
+                             if board[(yy) * width + (x+1)] != 0:
+                                 print("#####BLOCKED x+1")
+                                 print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                 score = -10000
+                                 break
+                        if direction==1 or direction==3:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+2)] != 0:
+                                    print("#####BLOCKED x+2")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                    score = -10000
+                                    break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
                 if self.CurrentShape_index==3 :
@@ -338,6 +369,25 @@ class Block_Controller(object):
                             x0 = x+1
                         else:
                             x0 = x
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x)] != 0:
+                                print("#####BLOCKED x+0")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x+1)] != 0:
+                                print("#####BLOCKED x+1")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        if direction==1 or direction==3:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+2)] != 0:
+                                    print("#####BLOCKED x+2")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                    score = -10000
+                                    break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
                 if self.CurrentShape_index==4 :
@@ -348,6 +398,25 @@ class Block_Controller(object):
                             x0 = x+1
                         else:
                             x0 = x
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x)] != 0:
+                                print("#####BLOCKED x+0")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x+1)] != 0:
+                                print("#####BLOCKED x+1")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        if direction==1 or direction==3:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+2)] != 0:
+                                    print("#####BLOCKED x+2")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                    score = -10000
+                                    break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
                 if self.CurrentShape_index==5 :
@@ -355,14 +424,18 @@ class Block_Controller(object):
                         direction = dic_pat5[pat03x]
                         score = 19
                         x0 = x+0
-                        for yy in range(y,0,-1):
-                             if board[(yy) * width + (x0)] != 0:
-                                 score = -10000
-                                 break
-                        for yy in range(y,0,-1):
-                             if board[(yy) * width + (x0+1)] != 0:
-                                 score = -10000
-                                 break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x)] != 0:
+                                print("#####BLOCKED x+0")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x+1)] != 0:
+                                print("#####BLOCKED x+1")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
                 if self.CurrentShape_index==6 :
@@ -373,6 +446,25 @@ class Block_Controller(object):
                             x0 = x+1
                         else:
                             x0 = x
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x)] != 0:
+                                print("#####BLOCKED x+0")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x+1)] != 0:
+                                print("#####BLOCKED x+1")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        if direction==0:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+2)] != 0:
+                                    print("#####BLOCKED x+2")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                    score = -10000
+                                    break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
                 if self.CurrentShape_index==7 :
@@ -383,6 +475,25 @@ class Block_Controller(object):
                             x0 = x+1
                         else:
                             x0 = x
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x)] != 0:
+                                print("#####BLOCKED x+0")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        for yy in range(y-1,0,-1):
+                            if board[(yy) * width + (x+1)] != 0:
+                                print("#####BLOCKED x+1")
+                                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                score = -10000
+                                break
+                        if direction==0:
+                            for yy in range(y-1,0,-1):
+                                if board[(yy) * width + (x+2)] != 0:
+                                    print("#####BLOCKED x+2")
+                                    print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                                    score = -10000
+                                    break
                         #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                         break
 
@@ -478,6 +589,7 @@ class Block_Controller(object):
         score = 0
         score = score + fullLines * 10.0           # try to delete line 
         score = score - nHoles * 1.0               # try not to make hole
+        #score = score - nHoles * 0.0               # try not to make hole
         score = score - nIsolatedBlocks * 1.0      # try not to make isolated block
         score = score - absDy * 1.0                # try to put block smoothly
         #score = score - maxDy * 0.3                # maxDy
@@ -485,7 +597,8 @@ class Block_Controller(object):
         #score = score - stdY * 1.0                 # statistical data
         #score = score - stdDY * 0.01               # statistical data
 
-        # print(score, fullLines, nHoles, nIsolatedBlocks, maxHeight, stdY, stdDY, absDy, BlockMaxY)
+        #print(score, fullLines, nHoles, nIsolatedBlocks, maxHeight, stdY, stdDY, absDy, BlockMaxY)
+        print(">>>>>>>>>>(score,fullLines,nHoles,nIsoLateBlocks,absDy,BlockMaxY)=(",score, fullLines, nHoles, nIsolatedBlocks, absDy, BlockMaxY,")")
         return score
 
 BLOCK_CONTROLLER = Block_Controller()
