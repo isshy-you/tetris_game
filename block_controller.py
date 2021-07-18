@@ -77,14 +77,14 @@ class Block_Controller(object):
         # search best nextMove <--
 
         #print("!!! debug    :(EvalValue,index,strategy(dir,x,y_ope,y_mov))=( ",LatestEvalValue,self.CurrentShape_index,strategy,")")
-        print("=== processing time ===(", datetime.now() - t1,")")
+        #print("=== processing time ===(", datetime.now() - t1,")")
         nextMove["strategy"]["direction"] = strategy[0]
         nextMove["strategy"]["x"] = strategy[1]
         nextMove["strategy"]["y_operation"] = strategy[2]
         nextMove["strategy"]["y_moveblocknum"] = strategy[3]
         print("=== nextMove:",nextMove)
-        print("###### ISH02(BLAVO:13190/10211) w/SAMPLE CODE ######")
-        print("###### ISH02a(CHARLIE:13954/) w/SAMPLE CODE ######")
+        #print("###### ISH02(BLAVO:13190/10211) w/SAMPLE CODE ######")
+        #print("###### ISH02a(CHARLIE:13954/) w/SAMPLE CODE ######")
         return nextMove
 
         
@@ -243,7 +243,7 @@ class Block_Controller(object):
                         pat2 += 1 #bottom
                     elif board[(y+3) * width + (x + 2)]!=0 :
                         pat2 += 1
-                        print("pat2+=1:::",pat2)
+                        #print("pat2+=1:::",pat2)
 
                     if pat2==0 and y<(height-4) and self.CurrentShape_index!=1 and self.CurrentShape_index!=5:
                         if board[(y+4) * width + (x + 2)]==0:
@@ -276,7 +276,7 @@ class Block_Controller(object):
                     else:
                         pat = pat0*4096+pat1*256+pat2*16
                     #DEBUG
-                    print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
+                    #print("(index,x,y,pat)=(",self.CurrentShape_index,x,y,format(pat,'04x'),")")
                 else:
                     pat = 0xfff
 
@@ -498,7 +498,7 @@ class Block_Controller(object):
                         break
 
             if score > 18 :
-                print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
+                #print("(index,x0,x,y,direction,pat)=(",self.CurrentShape_index,x0,x,y,direction,format(pat,'04x'),")")
                 break                    
         #            
         return score,x0,direction
@@ -598,7 +598,7 @@ class Block_Controller(object):
         #score = score - stdDY * 0.01               # statistical data
 
         #print(score, fullLines, nHoles, nIsolatedBlocks, maxHeight, stdY, stdDY, absDy, BlockMaxY)
-        print(">>>>>>>>>>(score,fullLines,nHoles,nIsoLateBlocks,absDy,BlockMaxY)=(",score, fullLines, nHoles, nIsolatedBlocks, absDy, BlockMaxY,")")
+        #print(">>>>>>>>>>(score,fullLines,nHoles,nIsoLateBlocks,absDy,BlockMaxY)=(",score, fullLines, nHoles, nIsolatedBlocks, absDy, BlockMaxY,")")
         return score
 
 BLOCK_CONTROLLER = Block_Controller()
