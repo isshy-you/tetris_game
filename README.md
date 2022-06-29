@@ -1,3 +1,12 @@
+---
+
+!!! this repository is deprecated, use following new repository !!!  
+!!! このリポジトリは非推奨です。以下の新しいリポジトリを使用してください !!!  
+
+https://github.com/seigot/tetris
+
+---
+
 # Tetris Game
 
 プログラミング学習を目的とした、ブロックを操作してスコアを競うゲームです。<br>
